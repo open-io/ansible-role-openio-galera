@@ -1,0 +1,28 @@
+# roles/galera/vars/RedHat.yml
+# Distribution-specific variables for RHEL, CentOS, ...
+---
+openio_galera_packages:
+  - MySQL-python
+  - socat
+  - mariadb
+  - mariadb-server
+  - galera
+  - percona-xtrabackup
+
+#openio_galera_service: "rh-mariadb{{ openio_galera_version | replace('.','') }}-mariadb"
+openio_galera_service: "mariadb"
+
+#openio_galera_repo_baseurl: "http://yum.mariadb.org/{{ openio_galera_version }}/centos7-amd64"
+#openio_galera_repo_filename: "MariaDB"
+#openio_galera_repo_gpgkey: https://yum.mariadb.org/RPM-GPG-KEY-MariaDB
+
+openio_galera_socket: /var/lib/mysql/mysql.sock
+openio_galera_log_error: "/var/log/mariadb/mariadb.log"
+openio_galera_pidfile: "/run/mariadb/mariadb.pid"
+openio_galera_confdir: "/etc/my.cnf.d"
+openio_galera_datadir: "/var/lib/mysql"
+#openio_galera_config_file: "{{ openio_galera_confdir }}/mariadb-server.cnf"
+
+openio_galera_wsrep_provider: "/usr/lib64/galera/libgalera_smm.so"
+openio_galera_bin_new_cluster: "/usr/bin/galera_new_cluster"
+...

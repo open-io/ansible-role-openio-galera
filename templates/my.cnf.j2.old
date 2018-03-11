@@ -1,0 +1,107 @@
+# {{ ansible_managed }}
+[mysqld]
+
+# GENERAL #####
+{% if openio_galera_socket %}socket={{ openio_galera_socket }}{% endif %}
+
+user={{ openio_galera_mysql_user }}
+datadir={{ openio_galera_data_dir }}
+
+
+{% if openio_galera_log_warnings %}log_warnings={{ openio_galera_log_warnings }}{% endif %}
+
+{% if openio_galera_slow_query_log %}slow_query_log={{ openio_galera_slow_query_log }}{% endif %}
+
+{% if openio_galera_long_query_time %}long_query_time={{ openio_galera_long_query_time }}{% endif %}
+
+{% if openio_galera_max_connections %}max_connections={{ openio_galera_max_connections }}{% endif %}
+
+{% if openio_galera_max_user_connections %}max_user_connections={{ openio_galera_max_user_connections }}{% endif %}
+
+{% if openio_galera_max_allowed_packet %}max_allowed_packet={{ openio_galera_max_allowed_packet }}{% endif %}
+
+{% if openio_galera_max_heap_table_size %}max_heap_table_size={{ openio_galera_max_heap_table_size }}{% endif %}
+
+{% if openio_galera_query_cache_size %}query_cache_size={{ openio_galera_query_cache_size }}{% endif %}
+
+{% if openio_galera_sort_buffer_size %}sort_buffer_size={{ openio_galera_sort_buffer_size }}{% endif %}
+
+{% if openio_galera_tmp_table_size %}tmp_table_size={{ openio_galera_tmp_table_size }}{% endif %}
+
+{% if openio_galera_read_buffer_size %}read_buffer_size={{ openio_galera_read_buffer_size }}{% endif %}
+
+{% if openio_galera_read_rnd_buffer_size %}read_rnd_buffer_size={{ openio_galera_read_rnd_buffer_size }}{% endif %}
+
+{% if openio_galera_join_buffer_size %}join_buffer_size={{ openio_galera_join_buffer_size }}{% endif %}
+
+{% if openio_galera_table_definition_cache %}table_definition_cache={{ openio_galera_table_definition_cache }}{% endif %}
+
+{% if openio_galera_table_open_cache %}table_open_cache={{ openio_galera_table_open_cache }}{% endif %}
+
+{% if openio_galera_table_open_cache_instances %}table_open_cache_instances={{ openio_galera_table_open_cache_instances }}{% endif %}
+
+{% if openio_galera_character_set_server %}character_set_server={{ openio_galera_character_set_server }}{% endif %}
+
+{% if openio_galera_collation_server %}collation_server={{ openio_galera_collation_server }}{% endif %}
+
+
+{% if openio_galera_skip_name_resolve %}# Skip reverse DNS lookup of clients
+skip_name_resolve={{ openio_galera_skip_name_resolve }}{% endif %}
+
+{% if openio_galera_default_storage_engine %}default_storage_engine={{ openio_galera_default_storage_engine }}{% endif %}
+
+
+# INNODB options #####
+{% if openio_galera_innodb_strict_mode %}innodb_strict_mode={{ openio_galera_innodb_strict_mode }}{% endif %}
+
+{% if openio_galera_innodb_file_format_check %}innodb_file_format_check={{ openio_galera_innodb_file_format_check }}{% endif %}
+
+{% if openio_galera_innodb_file_format %}innodb_file_format={{ openio_galera_innodb_file_format }}{% endif %}
+
+{% if openio_galera_innodb_buffer_pool_size %}innodb_buffer_pool_size={{ openio_galera_innodb_buffer_pool_size }}{% endif %}
+
+{% if openio_galera_innodb_buffer_pool_instances %}innodb_buffer_pool_instances={{ openio_galera_innodb_buffer_pool_instances }}{% endif %}
+
+{% if openio_galera_innodb_file_per_table %}innodb_file_per_table={{ openio_galera_innodb_file_per_table }}{% endif %}
+
+{% if openio_galera_innodb_flush_log_at_trx_commit %}innodb_flush_log_at_trx_commit={{ openio_galera_innodb_flush_log_at_trx_commit }}{% endif %}
+
+{% if openio_galera_innodb_log_buffer_size %}innodb_log_buffer_size={{ openio_galera_innodb_log_buffer_size }}{% endif %}
+
+{% if openio_galera_innodb_log_file_size %}innodb_log_file_size={{ openio_galera_innodb_log_file_size }}{% endif %}
+
+
+{% if openio_galera_innodb_autoinc_lock_mode %}# This InnoDB autoincrement locking mode is a requirement for Galera
+innodb_autoinc_lock_mode={{ openio_galera_innodb_autoinc_lock_mode }}{% endif %}
+
+
+# REPLICATION SPECIFIC #####
+
+{% if openio_galera_binlog_format %}# In order for Galera to work correctly binlog format should be ROW
+binlog_format={{ openio_galera_binlog_format }}{% endif %}
+
+
+# WSREP options #####
+
+wsrep_on=ON
+
+# Path to Galera library
+wsrep_provider={{ openio_galera_wsrep_provider }}
+
+# Node address
+wsrep_node_address={{ openio_galera_bind_address }}
+
+# Node name
+wsrep_node_name={{ ansible_hostname }}
+
+# Cluster name
+wsrep_cluster_name={{ openio_galera_cluster_name }}
+
+# Cluster connection URL contains the IPs of node#1, node#2 and node#3
+wsrep_cluster_address={{ openio_galera_wsrep_cluster_address }}
+
+# SST method
+wsrep_sst_method=xtrabackup-v2
+
+# Authentication for SST method
+wsrep_sst_auth={{ openio_galera_sst_user }}:{{ openio_galera_sst_password }}

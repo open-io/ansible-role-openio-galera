@@ -1,0 +1,30 @@
+# {{ ansible_managed }}
+[server]
+
+[mysqld]
+user={{ openio_galera_mysql_user }}
+datadir={{ openio_galera_datadir }}
+socket={{ openio_galera_socket }}
+log-error={{ openio_galera_log_error }}
+pid-file={{ openio_galera_pidfile }}
+
+[galera]
+wsrep_on=ON
+wsrep_provider={{ openio_galera_wsrep_provider }}
+wsrep_node_name={{ ansible_hostname }}
+wsrep_node_address={{ openio_galera_bind_address }}
+bind-address=0.0.0.0
+wsrep_cluster_name={{ openio_galera_cluster_name }}
+wsrep_cluster_address={{ openio_galera_wsrep_cluster_address }}
+binlog_format={{ openio_galera_binlog_format }}
+default_storage_engine={{ openio_galera_default_storage_engine }}
+innodb_autoinc_lock_mode={{ openio_galera_innodb_autoinc_lock_mode }}
+
+{% if openio_galera_innodb_flush_log_at_trx_commit %}innodb_flush_log_at_trx_commit={{ openio_galera_innodb_flush_log_at_trx_commit }}{% endif %}
+
+[embedded]
+
+[mariadb]
+
+
+

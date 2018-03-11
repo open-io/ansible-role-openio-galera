@@ -1,0 +1,79 @@
+# roles/galera/tasks/main.yml
+---
+- include_vars: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags: install
+
+- name: "Include {{ ansible_distribution }} tasks"
+  include_tasks: "{{ item }}"
+  with_first_found:
+    - "{{ ansible_distribution }}.yml"
+    - "{{ ansible_os_family }}.yml"
+  tags: install
+
+- name: Check running Mysql
+  shell: 'ps -ef | grep -E "mys\\qld" | tr -s " " " " | cut -d" " -f2 |head -n1'
+  changed_when: false
+  ignore_errors: true
+  register: _openio_galera_mysqld_already_running
+
+- name: Check data directory
+  stat:
+    path: "{{ openio_galera_data_dir }}"
+  register: "_openio_galera_data_exist"
+  tags: install
+
+- debug:
+    var: _openio_galera_data_exist.stat.exists
+- debug:
+    var: _openio_galera_mysqld_already_running.stdout
+
+- name: Install packages
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ openio_galera_packages }}"
+  tags: install
+
+- name: Ensure service is started for securing
+  service:
+    name: "{{ openio_galera_service }}"
+    state: started
+    enabled: true
+  tags: configure
+
+- name: Include secure tasks
+  import_tasks: secure_install.yml
+  tags: configure
+
+- name: Generate config file
+  template:
+    src:  "{{ item.src }}"
+    dest: "{{ item.dest }}"
+    owner: root
+    group: root
+    mode: 0644
+  with_items: 
+    - { src: 'mariadb.cnf.j2', dest: "{{ openio_galera_confdir }}/mariadb-server.cnf" }
+    - { src: 'galera.cnf.j2', dest: "{{ openio_galera_confdir }}/galera.cnf" }
+  tags: configure
+
+- name: Configure swappiness
+  sysctl:
+    name: vm.swappiness
+    value: "{{ openio_galera_swappiness }}"
+    state: present
+  when: docker is not defined
+
+- name: Bootstrap Cluster
+  import_tasks: bootstrap.yml
+  tags: configure
+
+- name: include postinstall tasks
+  import_tasks: postinstall.yml
+  tags: configure
+  when:
+    - openio_galera_bind_address == openio_galera_master_node
+...

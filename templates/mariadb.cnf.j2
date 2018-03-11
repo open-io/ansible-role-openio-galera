@@ -1,0 +1,14 @@
+# {{ ansible_managed }}
+[server]
+
+[mysqld]
+user={{ openio_galera_mysql_user }}
+datadir={{ openio_galera_datadir }}
+socket={{ openio_galera_socket }}
+log-error={{ openio_galera_log_error }}
+pid-file={{ openio_galera_pidfile }}
+
+[embedded]
+
+[mariadb]
+

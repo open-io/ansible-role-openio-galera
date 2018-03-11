@@ -1,0 +1,38 @@
+---
+- name: Ensure service is stopped
+  service:
+    name: "{{ openio_galera_service }}"
+    state: stopped
+  when:
+    - not _openio_galera_mysqld_already_running.stdout
+    - not _openio_galera_data_exist.stat.exists
+
+- name: Start the master node
+  command: "{{ openio_galera_bin_new_cluster }}"
+  when:
+    - not _openio_galera_mysqld_already_running.stdout
+    - not _openio_galera_data_exist.stat.exists
+    - openio_galera_bind_address == openio_galera_master_node
+    - ansible_service_mgr == 'systemd'
+
+- name: Create SST user
+  mysql_user:
+    login_user: "{{ openio_galera_root_user }}"
+    login_password: "{{ openio_galera_root_password }}"
+    user: "{{ openio_galera_sst_user }}"
+    password: "{{ openio_galera_sst_password }}"
+    priv: "*.*:grant,reload,lock tables,process,replication client"
+  when:
+    - not _openio_galera_mysqld_already_running.stdout
+    - not _openio_galera_data_exist.stat.exists
+    - openio_galera_bind_address == openio_galera_master_node
+ 
+- name: Start the slave nodes
+  service:
+    name: "{{ openio_galera_service }}"
+    state: started
+  when:
+    - not _openio_galera_mysqld_already_running.stdout
+    - not _openio_galera_data_exist.stat.exists
+    - openio_galera_bind_address != openio_galera_master_node
+...

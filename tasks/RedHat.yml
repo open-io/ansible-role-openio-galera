@@ -1,0 +1,27 @@
+---
+- name: Disable SELinux
+  selinux:
+    state: disabled
+  when: ansible_selinux.status == 'enabled'
+
+- name: Install repository Epel
+  package:
+    name: epel-release
+    state: present
+  when: openio_galera_repo_epel_managed
+
+#- name: Install repository  Software Collections  
+#  package:
+#    name: centos-release-scl
+#    state: present
+#  when: openio_galera_repo_scls_managed
+
+#- name: repository installation
+#  yum_repository:
+#    file: "{{ openio_galera_repo_filename }}"
+#    name: "{{ openio_galera_repo_filename }}"
+#    description: "MariaDB repository"
+#    baseurl: "{{ openio_galera_repo_baseurl }}"
+#    gpgkey: "{{ openio_galera_repo_gpgkey }}"
+#    gpgcheck: yes
+...

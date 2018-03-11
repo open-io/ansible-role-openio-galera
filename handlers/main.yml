@@ -1,0 +1,8 @@
+# roles/galera/handlers/main.yml
+---
+- name: restart galera
+  service:
+    name: "{{ openio_galera_service }}"
+    state: restarted
+
+...

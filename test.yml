@@ -1,0 +1,75 @@
+# Test playbook
+---
+- name: generate docker DB group
+  hosts: all
+  gather_facts: false
+  tasks:
+    - add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.ip }}"
+        groups: db
+      with_items:
+        - { name: "node1", ip: "172.17.0.2" }
+        - { name: "node2", ip: "172.17.0.3" }
+        - { name: "node3", ip: "172.17.0.4" }
+      delegate_to: localhost
+      run_once: true
+      changed_when: false
+
+- hosts: localhost
+  become: true
+  gather_facts: true
+  vars:
+    # cookie for systctl in docker
+    docker: "tests"
+  pre_tasks:
+    - name: set python interpreter
+      set_fact:
+        ansible_python_interpreter: /usr/bin/python3
+      when: ansible_os_family == 'Debian'
+
+  roles:
+    - role: role_under_test
+      openio_galera_cluster_name: test
+      openio_galera_sst_user: sstuser
+      openio_galera_sst_password: s3cr3t
+      openio_galera_root_password: yolo
+      openio_galera_nodes_group: db
+      #openio_galera_bind_interface: eth0
+      openio_galera_bind_address: "{{ ansible_default_ipv4.address }}"
+      openio_galera_wsrep_cluster_address: "gcomm://172.17.0.2,172.17.0.3,172.17.0.4"
+      openio_galera_master_node: "172.17.0.2"
+      openio_galera_databases:
+        - name: travisdb
+      openio_galera_users:
+        - name: travis
+          password: travispw
+          priv: '*.*:GRANT,ALL'
+          host: '172.17.0.%'
+
+      openio_galera_innodb_buffer_pool_instances: 8
+      openio_galera_innodb_buffer_pool_size: "384M"
+      openio_galera_innodb_file_format: "Barracuda"
+      openio_galera_innodb_file_format_check: "1"
+      openio_galera_innodb_file_per_table: "on"
+      openio_galera_innodb_flush_log_at_trx_commit: "1"
+      openio_galera_innodb_log_buffer_size: "16M"
+      openio_galera_innodb_log_file_size: "50M"
+      openio_galera_innodb_strict_mode: "on"
+      openio_galera_join_buffer_size: "128K"
+      openio_galera_log_warnings: "1"
+      openio_galera_long_query_time: "10"
+      openio_galera_max_allowed_packet: "16M"
+      openio_galera_max_connections: "505"
+      openio_galera_max_heap_table_size: "16M"
+      openio_galera_max_user_connections: "500"
+      openio_galera_query_cache_size: "0"   # disable
+      openio_galera_read_buffer_size: "128K"
+      openio_galera_read_rnd_buffer_size: "256k"
+      openio_galera_skip_name_resolve: "1"
+      openio_galera_slow_query_log: "1"
+      openio_galera_sort_buffer_size: "2M"
+      openio_galera_table_definition_cache: "1400"
+      openio_galera_table_open_cache: "2000"
+      openio_galera_table_open_cache_instances: "8"
+      openio_galera_tmp_table_size: "16M"

@@ -8,6 +8,8 @@ openio_galera_packages:
   - mariadb-server
   - galera
   - percona-xtrabackup
+  - mariadb-server-galera
+  - which
 
 #openio_galera_service: "rh-mariadb{{ openio_galera_version | replace('.','') }}-mariadb"
 openio_galera_service: "mariadb"
@@ -20,6 +22,7 @@ openio_galera_socket: /var/lib/mysql/mysql.sock
 openio_galera_log_error: "/var/log/mariadb/mariadb.log"
 openio_galera_pidfile: "/run/mariadb/mariadb.pid"
 openio_galera_confdir: "/etc/my.cnf.d"
+openio_galera_confd_dir: "{{ openio_galera_confdir }}"
 openio_galera_datadir: "/var/lib/mysql"
 #openio_galera_config_file: "{{ openio_galera_confdir }}/mariadb-server.cnf"
 

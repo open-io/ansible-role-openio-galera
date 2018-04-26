@@ -33,7 +33,7 @@
 - name: Install packages
   package:
     name: "{{ item }}"
-    state: installed
+    state: present
   with_items: "{{ openio_galera_packages }}"
   tags: install
 
@@ -56,8 +56,8 @@
     group: root
     mode: 0644
   with_items: 
-    - { src: 'mariadb.cnf.j2', dest: "{{ openio_galera_confdir }}/mariadb-server.cnf" }
-    - { src: 'galera.cnf.j2', dest: "{{ openio_galera_confdir }}/galera.cnf" }
+    - { src: 'mariadb.cnf.j2', dest: "{{ openio_galera_confd_dir }}/mariadb-server.cnf" }
+    - { src: 'galera.cnf.j2', dest: "{{ openio_galera_confd_dir }}/galera.cnf" }
   tags: configure
 
 - name: Configure swappiness

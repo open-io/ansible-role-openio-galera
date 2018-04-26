@@ -1,6 +1,6 @@
 # roles/galera/defaults/main.yml
 ---
-openio_galera_version: 10.2
+openio_galera_version: 10.1
 
 openio_galera_repo_epel_managed: true
 openio_galera_repo_scls_managed: true
@@ -27,6 +27,8 @@ openio_galera_cluster_name: openio
 openio_galera_users: []
 openio_galera_databases: []
 
+openio_galera_bind_address: 0.0.0.0
+openio_galera_wsrep_sst_method: xtrabackup-v2
 openio_galera_binlog_format: "ROW"
 #openio_galera_character_set_server: "utf8"
 #openio_galera_collation_server: "utf8_general_ci"
@@ -38,7 +40,8 @@ openio_galera_wsrep_certify_nonPK: ON
 #openio_galera_innodb_file_format: ""
 #openio_galera_innodb_file_format_check: ""
 #openio_galera_innodb_file_per_table: ""
-openio_galera_innodb_flush_log_at_trx_commit: ""
+openio_galera_innodb_flush_log_at_trx_commit: 0
+openio_galera_sync_binlog: 0
 #openio_galera_innodb_log_buffer_size: ""
 #openio_galera_innodb_log_file_size: ""
 #openio_galera_innodb_strict_mode: "on"

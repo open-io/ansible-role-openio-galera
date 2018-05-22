@@ -28,8 +28,6 @@ An Ansible role for install and configure a MariaDB Galera Cluster. Specifically
 | `openio_galera_master_node` | `groups[openio_galera_nodes_group][0]` | By default, the master node is the first node defined in the nodes group. |
 | `openio_galera_mysql_user` | `mysql` | ... |
 | `openio_galera_nodes_group` | `openio_galera` | ... |
-| `openio_galera_repo_epel_managed` | `true` | ... |
-| `openio_galera_repo_scls_managed` | `true` | ... |
 | `openio_galera_root_user` | `root` | ... |
 | `openio_galera_root_password` | `root` | Required. Please change the default root password. |
 | `openio_galera_sst_user` | `sstuser` | ... |

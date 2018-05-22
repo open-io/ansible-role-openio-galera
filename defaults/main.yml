@@ -2,9 +2,6 @@
 ---
 openio_galera_version: 10.1
 
-openio_galera_repo_epel_managed: true
-openio_galera_repo_scls_managed: true
-
 openio_galera_data_dir: /var/lib/mysql
 
 openio_galera_mysql_user: mysql

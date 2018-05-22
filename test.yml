@@ -36,7 +36,7 @@
       openio_galera_wsrep_sst_password: mysecretsstpassword
       openio_galera_cluster_name: myclustername
       openio_galera_nodes_group: db
-      #openio_galera_bind_interface: eth0
+      # openio_galera_bind_interface: eth0
       openio_galera_master_node: 172.17.0.2
       openio_galera_wsrep_cluster_address: gcomm://172.17.0.2,172.17.0.3,172.17.0.4
       openio_galera_databases:
@@ -46,3 +46,4 @@
           password: travispw
           priv: '*.*:GRANT,ALL'
           host: '172.17.0.%'
+...

@@ -23,17 +23,17 @@ IFS=$'\t\n'   # Split on newlines and tabs (but not on spaces)
 
 readonly container_id="$(mktemp)"
 readonly role_dir='/etc/ansible/roles/role_under_test'
-readonly test_playbook="${role_dir}/docker-tests/test.yml"
+if [ "$#" -ne 1 ]; then
+    readonly test_playbook="${role_dir}/docker-tests/test.yml"
+else
+    readonly test_playbook="${role_dir}/docker-tests/$1.yml"
+fi
+readonly requirements="${role_dir}/docker-tests/requirements.yml"
 
-# geerlingguy
-#readonly docker_image="geerlingguy/docker"
-#readonly image_tag="${docker_image}-${DISTRIBUTION}${VERSION}-ansible"
-# bertvv
-readonly docker_image="bertvv/ansible-testing"
-readonly image_tag="${docker_image}:${DISTRIBUTION}_${VERSION}"
-# williamyeh
-#readonly docker_image="williamyeh/ansible"
-#readonly image_tag="${docker_image}:${DISTRIBUTION}${VERSION}"
+#readonly docker_image="bertvv/ansible-testing"
+#readonly image_tag="${docker_image}:${DISTRIBUTION}_${VERSION}"
+readonly docker_image="cdelgehier/docker_images_ansible"
+readonly image_tag="${docker_image}:${ANSIBLE_VERSION}_${DISTRIBUTION}_${VERSION}"
 
 # Distribution specific settings
 init="/sbin/init"
@@ -45,6 +45,7 @@ main() {
 
   start_container
 
+  run_galaxy_install
   run_syntax_check
   run_test_playbook
   run_idempotence_test
@@ -65,21 +66,11 @@ main() {
 configure_environment() {
 
   case "${DISTRIBUTION}_${VERSION}" in
-    'centos_6')
-      run_opts+=('--volume=/sys/fs/cgroup:/sys/fs/cgroup:ro')
-      ;;
     'centos_7'|'fedora_25')
       init=/usr/lib/systemd/systemd
       run_opts+=('--volume=/sys/fs/cgroup:/sys/fs/cgroup:ro')
       ;;
-    'ubuntu_14.04')
-      #run_opts+=('--volume=/sys/fs/cgroup:/sys/fs/cgroup:ro')
-      # Workaround for issue when the host operating system has SELinux
-      if [ -x '/usr/sbin/getenforce' ]; then
-        run_opts+=('--volume=/sys/fs/selinux:/sys/fs/selinux:ro')
-      fi
-      ;;
-    'ubuntu_16.04'|'debian_8')
+    'ubuntu_16.04'|'debian_9')
       run_opts=('--volume=/run' '--volume=/run/lock' '--volume=/tmp' '--volume=/sys/fs/cgroup:/sys/fs/cgroup:ro' '--cap-add=SYS_ADMIN' '--cap-add=SYS_RESOURCE')
 
       #if [ -x '/usr/sbin/getenforce' ]; then
@@ -155,6 +146,12 @@ run_test_playbook() {
   log 'Run finished'
 }
 
+run_galaxy_install() {
+  log "Running ansible-galaxy install"
+  exec_container ansible-galaxy install -r "${requirements}"
+  log "Requirements installed"
+}
+
 run_idempotence_test() {
   log 'Running idempotence test' 
   local output
@@ -195,4 +192,3 @@ log() {
 #}}}
 
 main "${@}"
-

@@ -44,7 +44,7 @@ An Ansible role for install and configure a MariaDB Galera Cluster. Specifically
 
 ## Dependencies
 
-- You have to use this role after the role `ansible-role-openio-repository` (like [this](https://github.com/open-io/ansible-role-openio-gridinit/blob/docker-tests/test.yml#L7)).
+- You have to use this role after the role `ansible-role-openio-repository` (like [this](https://github.com/open-io/ansible-role-openio-galera/blob/docker-tests/test.yml#L7)).
 
 ## Example Playbook
 

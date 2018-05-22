@@ -9,9 +9,4 @@
     filename: "{{ openio_galera_repo_filename }}"
     repo: "{{ openio_galera_repo_baseurl }}"
     update_cache: yes
-
-#- name: update cache
-#  apt:
-#    update_cache: yes
-#  changed_when: false
 ...

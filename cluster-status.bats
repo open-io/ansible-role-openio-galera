@@ -26,7 +26,7 @@ pass='travispw'
 }
 
 @test 'Number of nodes in cluster' {
-  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_cluster_size"'
+  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_cluster_size"' | tr -s '\t' ' '
 
   echo "output: "$output
   echo "status: "$status
@@ -36,7 +36,7 @@ pass='travispw'
 }
 
 @test 'The node can accept queries' {
-  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_ready"'
+  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_ready"' | tr -s '\t' ' '
 
   echo "output: "$output
   echo "status: "$status
@@ -46,7 +46,7 @@ pass='travispw'
 }
 
 @test 'the node has network connectivity with any other nodes' {
-  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_connected"'
+  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_connected"' | tr -s '\t' ' '
 
   echo "output: "$output
   echo "status: "$status

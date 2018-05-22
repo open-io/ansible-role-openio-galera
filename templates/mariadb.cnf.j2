@@ -8,7 +8,11 @@ socket={{ openio_galera_socket }}
 log-error={{ openio_galera_log_error }}
 pid-file={{ openio_galera_pidfile }}
 
-[embedded]
+skip-name-resolve
 
-[mariadb]
-
+bind-address={{ openio_galera_bind_address }}
+binlog_format={{ openio_galera_binlog_format }}
+default_storage_engine={{ openio_galera_default_storage_engine }}
+innodb_autoinc_lock_mode={{ openio_galera_innodb_autoinc_lock_mode }}
+innodb_flush_log_at_trx_commit={{ openio_galera_innodb_flush_log_at_trx_commit }}
+sync_binlog={{ openio_galera_sync_binlog }}

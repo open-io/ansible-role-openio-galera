@@ -25,9 +25,11 @@
   register: "_openio_galera_data_exist"
   tags: install
 
-- debug:
+- name: DEBUG1
+  debug:
     var: _openio_galera_data_exist.stat.exists
-- debug:
+- name: DEBUG2
+  debug:
     var: _openio_galera_mysqld_already_running.stdout
 
 - name: Install packages
@@ -56,8 +58,9 @@
     group: root
     mode: 0644
   with_items: 
-    - { src: 'mariadb.cnf.j2', dest: "{{ openio_galera_confd_dir }}/mariadb-server.cnf" }
-    - { src: 'galera.cnf.j2', dest: "{{ openio_galera_confd_dir }}/galera.cnf" }
+    - { src: 'my.cnf.j2', dest: "{{ openio_galera_conf_global_file }}" }
+    - { src: 'mariadb.cnf.j2', dest: "{{ openio_galera_conf_mariadb_file }}" }
+    - { src: 'galera.cnf.j2', dest: "{{ openio_galera_conf_galera_file }}" }
   tags: configure
 
 - name: Configure swappiness

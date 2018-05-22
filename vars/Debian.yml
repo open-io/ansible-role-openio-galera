@@ -11,7 +11,8 @@ openio_galera_packages:
   - galera-3
 
 openio_galera_repo_filename: "mariaDB"
-openio_galera_repo_baseurl: "deb http://mariadb.mirrors.ovh.net/MariaDB/repo/{{ openio_galera_version }}/ubuntu {{ ansible_distribution_release }} main"
+openio_galera_repo_baseurl: "deb http://mariadb.mirrors.ovh.net/MariaDB/repo/{{ openio_galera_version }}/ubuntu
+ {{ ansible_distribution_release }} main"
 openio_galera_repo_gpgkey: F1656F24C74CD1D8
 openio_galera_repo_keyserver: keyserver.ubuntu.com
 
@@ -31,3 +32,4 @@ openio_galera_service: mysql
 openio_galera_socket: /var/run/mysqld/mysqld.sock
 openio_galera_log_error: /var/log/mysql/error.log
 openio_galera_pidfile: /var/run/mysqld/mysqld.pid
+...

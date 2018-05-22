@@ -8,5 +8,5 @@
   apt_repository:
     filename: "{{ openio_galera_repo_filename }}"
     repo: "{{ openio_galera_repo_baseurl }}"
-    update_cache: yes
+    update_cache: true
 ...

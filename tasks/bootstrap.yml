@@ -26,7 +26,7 @@
     - not _openio_galera_mysqld_already_running.stdout
     - not _openio_galera_data_exist.stat.exists
     - openio_galera_bind_address == openio_galera_master_node
- 
+
 - name: Start the slave nodes
   service:
     name: "{{ openio_galera_service }}"

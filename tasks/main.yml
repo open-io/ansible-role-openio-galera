@@ -45,12 +45,12 @@
 
 - name: Generate config file
   template:
-    src:  "{{ item.src }}"
+    src: "{{ item.src }}"
     dest: "{{ item.dest }}"
     owner: root
     group: root
     mode: 0644
-  with_items: 
+  with_items:
     - { src: 'my.cnf.j2', dest: "{{ openio_galera_conf_global_file }}" }
     - { src: 'mariadb.cnf.j2', dest: "{{ openio_galera_conf_mariadb_file }}" }
     - { src: 'galera.cnf.j2', dest: "{{ openio_galera_conf_galera_file }}" }

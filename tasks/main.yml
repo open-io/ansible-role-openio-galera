@@ -25,13 +25,6 @@
   register: "_openio_galera_data_exist"
   tags: install
 
-- name: DEBUG1
-  debug:
-    var: _openio_galera_data_exist.stat.exists
-- name: DEBUG2
-  debug:
-    var: _openio_galera_mysqld_already_running.stdout
-
 - name: Install packages
   package:
     name: "{{ item }}"

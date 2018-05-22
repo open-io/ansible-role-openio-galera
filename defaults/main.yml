@@ -2,17 +2,16 @@
 ---
 openio_galera_version: 10.1
 
-openio_galera_data_dir: /var/lib/mysql
+openio_galera_nodes_group: openio_galera
 
+openio_galera_data_dir: /var/lib/mysql
 openio_galera_mysql_user: mysql
 openio_galera_root_user: root
 openio_galera_root_password: root
 
-openio_galera_swappiness: 0
 
 openio_galera_bind_interface: eth0
 openio_galera_master_node: "{{ groups[openio_galera_nodes_group][0] | map('extract', hostvars, ['ansible_' ~ openio_galera_bind_interface, 'ipv4', 'address']) }}"
-openio_galera_nodes_group: openio_galera
 openio_galera_wsrep_cluster_address: "gcomm://{{ groups[openio_galera_nodes_group] | map('extract', hostvars, ['ansible_' ~ openio_galera_bind_interface, 'ipv4', 'address']) | join(',') }}"
 openio_galera_bind_address: "{{ hostvars[inventory_hostname]['ansible_' + openio_galera_bind_interface]['ipv4']['address'] }}"
 
@@ -25,6 +24,7 @@ openio_galera_cluster_name: openio
 openio_galera_users: []
 openio_galera_databases: []
 
+openio_galera_swappiness: 0
 openio_galera_wsrep_sst_method: xtrabackup-v2
 openio_galera_binlog_format: "ROW"
 #openio_galera_character_set_server: "utf8"

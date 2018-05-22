@@ -27,6 +27,10 @@ before_install:
   - sudo pip install ansible-lint yamllint
 
 script:
+  # Lint
+  - ansible-lint . -x ANSIBLE0016
+  - yamllint .
+
   # Running the test script the first time will set up the first server
   # with IP 172.17.0.2. Running it the second time sets up the second and
   # third server with IP 172.17.0.3 and 172.17.0.4.

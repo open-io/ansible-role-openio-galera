@@ -8,7 +8,7 @@ pass='travispw'
 
 # Tests
 @test 'Anonymous access should not work' {
-  run mysql -ss -u'' -h ${SUT_IP} -e ';'
+  run mysql -Bs -u'' -h ${SUT_IP} -e ';'
 
   echo "output: "$output
   echo "status: "$status
@@ -17,7 +17,7 @@ pass='travispw'
 }
 
 @test 'Travis user connection' {
-  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e ';'
+  run mysql -Bs -u${user} -p${pass} -h ${SUT_IP} -e ';'
 
   echo "output: "$output
   echo "status: "$status
@@ -26,31 +26,31 @@ pass='travispw'
 }
 
 @test 'Number of nodes in cluster' {
-  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_cluster_size"' | tr -s '\t' ' '
+  run bash -c "mysql -Bs -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = \"wsrep_cluster_size\"' | tr -s '\t' ' '"
 
-  echo "output: "$output
+  echo "output: "${output: -1}
   echo "status: "$status
 
   [ "${status}" -eq "0" ]
-  [ "${output}" = "wsrep_cluster_size	3" ]
+  [ "${output: -1}" = "3" ]
 }
 
 @test 'The node can accept queries' {
-  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_ready"' | tr -s '\t' ' '
+  run bash -c "mysql -Bs -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = \"wsrep_ready\"' | tr -s '\t' ' '"
 
-  echo "output: "$output
+  echo "output: "${output: -2}
   echo "status: "$status
 
   [ "${status}" -eq "0" ]
-  [ "${output}" = "wsrep_ready	ON" ]
+  [ "${output: -2}" = "ON" ]
 }
 
 @test 'the node has network connectivity with any other nodes' {
-  run mysql -ss -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = "wsrep_connected"' | tr -s '\t' ' '
+  run bash -c "mysql -Bs -u${user} -p${pass} -h ${SUT_IP} -e 'show global status where variable_name = \"wsrep_connected\"' | tr -s '\t' ' '"
 
-  echo "output: "$output
+  echo "output: "${output: -2}
   echo "status: "$status
 
   [ "${status}" -eq "0" ]
-  [ "${output}" = "wsrep_connected	ON" ]
+  [ "${output: -2}" = "ON" ]
 }

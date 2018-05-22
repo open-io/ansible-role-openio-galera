@@ -1,5 +1,5 @@
 ---
-- name: Check password 
+- name: Check password
   command: mysql -e ';'
   changed_when: false
   ignore_errors: true
@@ -11,14 +11,14 @@
 - name: Set the MySQL root password
   command: 'mysqladmin -u root password "{{ openio_galera_root_password }}"'
   changed_when: false
-  when: not _check_password.failed 
+  when: not _check_password.failed
 
 - name: Delete anonymous connections
   mysql_user:
     login_user: "{{ openio_galera_root_user }}"
     login_password: "{{ openio_galera_root_password }}"
     name: ""
-    host_all: yes
+    host_all: "yes"
     state: absent
 
 - name: "Secure the MySQL root user for localhost"

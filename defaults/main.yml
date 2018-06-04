@@ -11,8 +11,8 @@ openio_galera_root_password: root
 
 
 openio_galera_bind_interface: eth0
-openio_galera_master_node: "{{ groups[openio_galera_nodes_group][0] |
-  map('extract', hostvars, ['ansible_' ~ openio_galera_bind_interface, 'ipv4', 'address']) }}"
+openio_galera_master_node: "{{ hostvars[groups[openio_galera_nodes_group][0]]
+  ['ansible_' ~ openio_galera_bind_interface]['ipv4']['address'] }}"
 openio_galera_wsrep_cluster_address: "gcomm://{{ groups[openio_galera_nodes_group] |
   map('extract', hostvars, ['ansible_' ~ openio_galera_bind_interface, 'ipv4', 'address']) | join(',') }}"
 openio_galera_bind_address: "{{ hostvars[inventory_hostname]['ansible_' +

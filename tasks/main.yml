@@ -67,6 +67,7 @@
 - name: Bootstrap Cluster
   import_tasks: bootstrap.yml
   tags: configure
+  when: openio_galera_bootstrap_cluster
 
 - name: include postinstall tasks
   import_tasks: postinstall.yml

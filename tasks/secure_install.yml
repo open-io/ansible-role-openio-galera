@@ -5,9 +5,6 @@
   ignore_errors: true
   register: _check_password
 
-- debug:
-    var: _check_password
-
 - name: Set the MySQL root password
   command: 'mysqladmin -u root password "{{ openio_galera_root_password }}"'
   changed_when: false
@@ -32,7 +29,6 @@
     - "127.0.0.1"
     - "localhost"
     #- "{{ openio_galera_bind_address }}"
-
 
 - name: Remove the MySQL test database
   mysql_db:

@@ -21,7 +21,7 @@ An Ansible role for install and configure a MariaDB Galera Cluster. Specifically
 | `openio_galera_binlog_format` | `ROW` | ... |
 | `openio_galera_cluster_name` | `openio` | ... |
 | `openio_galera_databases` | `[]` | Creates databases for your cluster. |
-| `openio_galera_data_dir` | `/var/lib/mysql` | ... |
+| `openio_galera_datadir` | `/var/lib/mysql` | ... |
 | `openio_galera_default_storage_engine` | `InnoDB` | ... |
 | `openio_galera_innodb_autoinc_lock_mode` | `2` | ... |
 | `openio_galera_innodb_flush_log_at_trx_commit` | `0` | ... |

@@ -22,7 +22,7 @@
 
 - name: Check data directory
   stat:
-    path: "{{ openio_galera_data_dir }}"
+    path: "{{ openio_galera_datadir }}"
   register: "_openio_galera_data_exist"
   tags: install
 

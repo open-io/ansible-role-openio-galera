@@ -4,7 +4,7 @@ openio_galera_version: 10.1
 
 openio_galera_nodes_group: openio_galera
 
-openio_galera_data_dir: /var/lib/mysql
+openio_galera_datadir: /var/lib/mysql
 openio_galera_mysql_user: mysql
 openio_galera_root_user: root
 openio_galera_root_password: root

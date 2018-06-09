@@ -24,7 +24,6 @@ openio_galera_conf_global_file: "{{ openio_galera_confdir }}/my.cnf"
 openio_galera_conf_mariadb_file: "{{ openio_galera_confd_dir }}/mariadb.cnf"
 openio_galera_conf_galera_file: "{{ openio_galera_confd_dir }}/galera.cnf"
 
-openio_galera_datadir: /var/lib/mysql
 openio_galera_bin_new_cluster: /usr/bin/galera_new_cluster
 
 openio_galera_service: mysql

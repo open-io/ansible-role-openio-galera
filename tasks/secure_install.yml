@@ -4,6 +4,7 @@
   changed_when: false
   ignore_errors: true
   register: _check_password
+  failed_when: false
 
 - name: Set the MySQL root password
   command: 'mysqladmin -u root password "{{ openio_galera_root_password }}"'

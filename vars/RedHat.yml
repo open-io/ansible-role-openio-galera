@@ -15,7 +15,7 @@ openio_galera_wsrep_provider: /usr/lib64/galera/libgalera_smm.so
 
 openio_galera_confdir: /etc/my.cnf.d
 openio_galera_confd_dir: "{{ openio_galera_confdir }}"
-openio_galera_conf_global_file: "{{ openio_galera_confdir }}/my.cnf"
+openio_galera_conf_global_file: /etc/my.cnf
 openio_galera_conf_mariadb_file: "{{ openio_galera_confd_dir }}/mariadb.cnf"
 openio_galera_conf_galera_file: "{{ openio_galera_confd_dir }}/galera.cnf"
 

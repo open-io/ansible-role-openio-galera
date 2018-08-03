@@ -4,5 +4,4 @@
   service:
     name: "{{ openio_galera_service }}"
     state: restarted
-
 ...

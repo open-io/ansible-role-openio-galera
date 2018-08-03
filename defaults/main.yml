@@ -10,13 +10,14 @@ openio_galera_root_user: root
 openio_galera_root_password: root
 
 
-openio_galera_bind_interface: eth0
-openio_galera_master_node: "{{ hostvars[groups[openio_galera_nodes_group][0]]
-  ['ansible_' ~ openio_galera_bind_interface]['ipv4']['address'] }}"
-openio_galera_wsrep_cluster_address: "gcomm://{{ groups[openio_galera_nodes_group] |
-  map('extract', hostvars, ['ansible_' ~ openio_galera_bind_interface, 'ipv4', 'address']) | join(',') }}"
-openio_galera_bind_address: "{{ hostvars[inventory_hostname]['ansible_' +
-  openio_galera_bind_interface]['ipv4']['address'] }}"
+openio_galera_bind_interface: "{{ ansible_default_ipv4.alias }}"
+openio_galera_bind_address:
+  "{{ hostvars[inventory_hostname]['ansible_' + openio_galera_bind_interface]['ipv4']['address'] }}"
+
+openio_galera_master_node:
+  "{{ hostvars[groups[openio_galera_nodes_group][0]]['ansible_' ~ openio_galera_bind_interface]['ipv4']['address'] }}"
+openio_galera_wsrep_cluster_address: "gcomm://{{ groups[openio_galera_nodes_group] \
+  | map('extract', hostvars, ['ansible_' ~ openio_galera_bind_interface, 'ipv4', 'address']) | join(',') }}"
 
 openio_galera_bootstrap_cluster: true
 
@@ -31,39 +32,14 @@ openio_galera_databases: []
 openio_galera_swappiness: 0
 openio_galera_wsrep_sst_method: xtrabackup-v2
 openio_galera_binlog_format: "ROW"
-#openio_galera_character_set_server: "utf8"
-#openio_galera_collation_server: "utf8_general_ci"
+
 openio_galera_default_storage_engine: "InnoDB"
 openio_galera_innodb_autoinc_lock_mode: 2
 openio_galera_wsrep_certify_nonPK: "ON"
-#openio_galera_innodb_buffer_pool_instances: ""
-#openio_galera_innodb_buffer_pool_size: ""
-#openio_galera_innodb_file_format: ""
-#openio_galera_innodb_file_format_check: ""
-#openio_galera_innodb_file_per_table: ""
+
 openio_galera_innodb_flush_log_at_trx_commit: 0
 openio_galera_sync_binlog: 0
-#openio_galera_innodb_log_buffer_size: ""
-#openio_galera_innodb_log_file_size: ""
-#openio_galera_innodb_strict_mode: "on"
-#openio_galera_join_buffer_size: ""
-#openio_galera_log_warnings: ""
-#openio_galera_long_query_time: ""
-#openio_galera_max_allowed_packet: ""
-#openio_galera_max_connections: "4096"
-#openio_galera_max_heap_table_size: ""
-#openio_galera_max_user_connections: ""
-#openio_galera_query_cache_size: ""
-#openio_galera_read_buffer_size: ""
-#openio_galera_read_rnd_buffer_size: ""
-#openio_galera_skip_name_resolve: "1"
-#openio_galera_slow_query_log: "0"
-#openio_galera_socket: ""
-#openio_galera_sort_buffer_size: ""
-#openio_galera_table_definition_cache: ""
-#openio_galera_table_open_cache: ""
-#openio_galera_table_open_cache_instances: ""
-#openio_galera_tmp_table_size: ""
+
 openio_galera_wsrep_max_ws_rows: "131072"
 openio_galera_wsrep_max_ws_size: "1073741824"
 ...

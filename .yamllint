@@ -62,10 +62,10 @@ rules:
   new-lines:
     level: error
     type: unix
-#  octal-values:
-#    level: error
-#    forbid-implicit-octal: false
-#    forbid-explicit-octal: false
+  octal-values:
+    level: error
+    forbid-implicit-octal: false
+    forbid-explicit-octal: false
   trailing-spaces: enable
   truthy:
     level: error

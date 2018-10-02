@@ -38,6 +38,10 @@
     name: "{{ openio_galera_service }}"
     state: started
     enabled: true
+  register: mysql_started
+  until: mysql_started is success
+  retries: 2
+  delay: 10
   tags: configure
 
 - name: Include secure tasks

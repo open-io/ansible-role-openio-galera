@@ -6,6 +6,7 @@
   when:
     - not _openio_galera_mysqld_already_running.stdout
     - not _openio_galera_data_exist.stat.exists
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Start the master node
   command: "{{ openio_galera_bin_new_cluster }}"
@@ -14,6 +15,7 @@
     - not _openio_galera_data_exist.stat.exists
     - openio_galera_bind_address == openio_galera_master_node
     - ansible_service_mgr == 'systemd'
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Create SST user
   mysql_user:
@@ -26,6 +28,7 @@
     - not _openio_galera_mysqld_already_running.stdout
     - not _openio_galera_data_exist.stat.exists
     - openio_galera_bind_address == openio_galera_master_node
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Start the slave nodes
   service:
@@ -35,4 +38,5 @@
     - not _openio_galera_mysqld_already_running.stdout
     - not _openio_galera_data_exist.stat.exists
     - openio_galera_bind_address != openio_galera_master_node
+  ignore_errors: "{{ ansible_check_mode }}"
 ...

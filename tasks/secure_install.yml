@@ -9,6 +9,7 @@
   command: 'mysqladmin -u root password "{{ openio_galera_root_password }}"'
   changed_when: false
   when: _check_password.rc == 0
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Delete anonymous connections
   mysql_user:
@@ -17,6 +18,7 @@
     name: ""
     host_all: true
     state: absent
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: "Secure the MySQL root user for localhost"
   mysql_user:
@@ -29,6 +31,7 @@
     - "127.0.0.1"
     - "localhost"
     #- "{{ openio_galera_bind_address }}"
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Remove the MySQL test database
   mysql_db:
@@ -36,4 +39,5 @@
     login_user: "{{ openio_galera_root_user }}"
     login_password: "{{ openio_galera_root_password }}"
     state: absent
+  ignore_errors: "{{ ansible_check_mode }}"
 ...

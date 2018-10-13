@@ -7,6 +7,7 @@
     state: present
   with_items: "{{ openio_galera_databases }}"
   register: _db
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Copy database init scripts
   copy:
@@ -50,4 +51,5 @@
     login_password: "{{ openio_galera_root_password }}"
     state: present
   with_items: "{{ openio_galera_users }}"
+  ignore_errors: "{{ ansible_check_mode }}"
 ...

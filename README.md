@@ -18,6 +18,7 @@ An Ansible role for install and configure a MariaDB Galera Cluster. Specifically
 | :---       | :---    | :---             |
 | `openio_galera_bind_interface` | `"{{ ansible_default_ipv4.alias }}"` | By default, the role retrieves IP addresses from the nodes group from the default network interface. |
 | `openio_galera_bind_address` | `hostvars[inventory_hostname]['ansible_' + openio_galera_bind_interface]['ipv4']['address']` | Overrides the IP address used to setup the cluster. |
+| `openio_galera_bind_port` | `3306` | Overrides the listening port. |
 | `openio_galera_binlog_format` | `ROW` | ... |
 | `openio_galera_cluster_name` | `openio` | ... |
 | `openio_galera_databases` | `[]` | Creates databases for your cluster. |

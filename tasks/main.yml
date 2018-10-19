@@ -41,7 +41,7 @@
     enabled: true
   register: mysql_started
   until: mysql_started is success
-  retries: 2
+  retries: 5
   delay: 10
   tags: configure
 

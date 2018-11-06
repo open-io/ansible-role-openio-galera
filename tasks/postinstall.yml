@@ -5,6 +5,7 @@
     login_user: "{{ openio_galera_root_user }}"
     login_password: "{{ openio_galera_root_password }}"
     state: present
+    login_unix_socket: "{{ openio_galera_socket }}"
   with_items: "{{ openio_galera_databases }}"
   register: _db
   ignore_errors: "{{ ansible_check_mode }}"
@@ -26,6 +27,7 @@
     target: "/tmp/{{ item.item.init_script | basename }}"
     login_user: "{{ openio_galera_root_user }}"
     login_password: "{{ openio_galera_root_password }}"
+    login_unix_socket: "{{ openio_galera_socket }}"
   with_items: "{{ _db.results }}"
   when:
     - item.changed
@@ -50,6 +52,7 @@
     login_user: root
     login_password: "{{ openio_galera_root_password }}"
     state: present
+    login_unix_socket: "{{ openio_galera_socket }}"
   with_items: "{{ openio_galera_users }}"
   ignore_errors: "{{ ansible_check_mode }}"
 ...

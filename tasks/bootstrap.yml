@@ -24,6 +24,7 @@
     user: "{{ openio_galera_sst_user }}"
     password: "{{ openio_galera_sst_password }}"
     priv: "*.*:grant,reload,lock tables,process,replication client"
+    login_unix_socket: "{{ openio_galera_socket }}"
   when:
     - not _openio_galera_mysqld_already_running.stdout
     - not _openio_galera_data_exist.stat.exists

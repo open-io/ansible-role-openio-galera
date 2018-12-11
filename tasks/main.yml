@@ -26,6 +26,17 @@
   register: "_openio_galera_data_exist"
   tags: install
 
+- name: Check Galera cluster wsrep status
+  mysql_variables:
+    variable: "wsrep_on"
+    login_user: "{{ openio_galera_root_user }}"
+    login_password: "{{ openio_galera_root_password }}"
+    login_unix_socket: "{{ openio_galera_socket }}"
+  when: _openio_galera_mysqld_already_running.stdout
+  register: "_openio_galera_wsrep_on"
+  tags: install
+  failed_when: false
+
 - name: Install packages
   package:
     name: "{{ item }}"
@@ -43,11 +54,38 @@
     name: "{{ openio_galera_service }}"
     state: started
     enabled: true
-  register: mysql_started
-  until: mysql_started is success
-  retries: 5
+  register: _openio_galera_service_started
+  until: _openio_galera_service_started is success
+  retries: 2
   delay: 10
   tags: configure
+  failed_when: false
+
+- name: Disable wsrep API
+  command: systemctl set-environment MYSQLD_OPTS="--wsrep_on=OFF"
+  when: _openio_galera_service_started.state is not defined or _openio_galera_service_started.state != 'started'
+  register: _openio_galera_systemctl_set_environment
+
+- name: Retry starting service for securing
+  service:
+    name: "{{ openio_galera_service }}"
+    state: started
+    enabled: true
+  register: _openio_galera_service_started2
+  until: _openio_galera_service_started2 is success
+  retries: 2
+  delay: 10
+  tags: configure
+  failed_when: _openio_galera_service_started2.state is not defined and _openio_galera_service_started2.state != 'started'
+  when: _openio_galera_service_started.state is not defined or _openio_galera_service_started.state != 'started'
+
+- name: Check Galera cluster size
+  shell: mysql -BN -u root -p"{{ openio_galera_root_password }}" -e "SHOW GLOBAL STATUS LIKE 'wsrep_cluster_size'"|cut -f2
+  changed_when: false
+  register: "_openio_galera_wsrep_cluster_size"
+  tags: install
+  when: "(_openio_galera_wsrep_on.msg is defined and _openio_galera_wsrep_on.msg == 'ON') or _openio_galera_service_started is success"
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Include secure tasks
   import_tasks: secure_install.yml

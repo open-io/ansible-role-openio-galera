@@ -1,18 +1,29 @@
 ---
+- name: Check Galera cluster wsrep status
+  mysql_variables:
+    variable: "wsrep_on"
+    login_user: "{{ openio_galera_root_user }}"
+    login_password: "{{ openio_galera_root_password }}"
+    login_unix_socket: "{{ openio_galera_socket }}"
+  when: not _openio_galera_mysqld_already_running.stdout or _openio_galera_wsrep_on.stderr is defined
+  register: "_openio_galera_wsrep_on"
+  tags: install
+
 - name: Ensure service is stopped
   service:
     name: "{{ openio_galera_service }}"
     state: stopped
-  when:
-    - not _openio_galera_mysqld_already_running.stdout
-    - not _openio_galera_data_exist.stat.exists
+  when: (not _openio_galera_mysqld_already_running.stdout and not _openio_galera_data_exist.stat.exists) or (_openio_galera_wsrep_on.msg is defined and _openio_galera_wsrep_on.msg == 'OFF') or (_openio_galera_systemctl_set_environment is defined and not _openio_galera_systemctl_set_environment.skipped) or (_openio_galera_wsrep_cluster_size.stdout|int == 0)
   ignore_errors: "{{ ansible_check_mode }}"
+
+- name: Remove systemctl MYSQLD_OPTS environment option
+  command: systemctl unset-environment MYSQLD_OPTS
+  when: _openio_galera_systemctl_set_environment.cmd is defined
 
 - name: Start the master node
   command: "{{ openio_galera_bin_new_cluster }}"
   when:
-    - not _openio_galera_mysqld_already_running.stdout
-    - not _openio_galera_data_exist.stat.exists
+    - (not _openio_galera_mysqld_already_running.stdout and not _openio_galera_data_exist.stat.exists) or (_openio_galera_mysqld_already_running.stdout and _openio_galera_wsrep_on.msg is defined and _openio_galera_wsrep_on.msg == 'OFF') or (_openio_galera_systemctl_set_environment is defined and not _openio_galera_systemctl_set_environment.skipped) or (_openio_galera_wsrep_cluster_size.stdout|int == 0)
     - openio_galera_bind_address == openio_galera_master_node
     - ansible_service_mgr == 'systemd'
   ignore_errors: "{{ ansible_check_mode }}"
@@ -26,8 +37,7 @@
     priv: "*.*:grant,reload,lock tables,process,replication client"
     login_unix_socket: "{{ openio_galera_socket }}"
   when:
-    - not _openio_galera_mysqld_already_running.stdout
-    - not _openio_galera_data_exist.stat.exists
+    - (not _openio_galera_mysqld_already_running.stdout and not _openio_galera_data_exist.stat.exists) or (_openio_galera_mysqld_already_running.stdout and _openio_galera_wsrep_on.msg is defined and _openio_galera_wsrep_on.msg == 'OFF') or (_openio_galera_systemctl_set_environment is defined and not _openio_galera_systemctl_set_environment.skipped) or (_openio_galera_wsrep_cluster_size.stdout|int == 0)
     - openio_galera_bind_address == openio_galera_master_node
   ignore_errors: "{{ ansible_check_mode }}"
 
@@ -36,8 +46,7 @@
     name: "{{ openio_galera_service }}"
     state: started
   when:
-    - not _openio_galera_mysqld_already_running.stdout
-    - not _openio_galera_data_exist.stat.exists
+    - (not _openio_galera_mysqld_already_running.stdout and not _openio_galera_data_exist.stat.exists) or (_openio_galera_mysqld_already_running.stdout and _openio_galera_wsrep_on.msg is defined and _openio_galera_wsrep_on.msg == 'OFF') or (_openio_galera_systemctl_set_environment is defined and not _openio_galera_systemctl_set_environment.skipped) or (_openio_galera_wsrep_cluster_size.stdout|int == 0)
     - openio_galera_bind_address != openio_galera_master_node
   ignore_errors: "{{ ansible_check_mode }}"
 ...

@@ -16,8 +16,8 @@
     login_user: "{{ openio_galera_root_user }}"
     login_password: "{{ openio_galera_root_password }}"
     name: ""
-    host_all: true
     state: absent
+    login_unix_socket: "{{ openio_galera_socket }}"
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: "Secure the MySQL root user for localhost"
@@ -26,6 +26,7 @@
     login_password: "{{ openio_galera_root_password }}"
     name: "{{ openio_galera_root_user }}"
     host: "{{ item }}"
+    login_unix_socket: "{{ openio_galera_socket }}"
   with_items:
     - "::1"
     - "127.0.0.1"
@@ -39,5 +40,6 @@
     login_user: "{{ openio_galera_root_user }}"
     login_password: "{{ openio_galera_root_password }}"
     state: absent
+    login_unix_socket: "{{ openio_galera_socket }}"
   ignore_errors: "{{ ansible_check_mode }}"
 ...

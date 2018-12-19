@@ -76,15 +76,19 @@
   retries: 2
   delay: 10
   tags: configure
-  failed_when: _openio_galera_service_started2.state is not defined and _openio_galera_service_started2.state != 'started'
+  failed_when:
+    - _openio_galera_service_started2.state is not defined
+    - _openio_galera_service_started2.state != 'started'
   when: _openio_galera_service_started.state is not defined or _openio_galera_service_started.state != 'started'
 
 - name: Check Galera cluster size
-  shell: mysql -BN -u root -p"{{ openio_galera_root_password }}" -e "SHOW GLOBAL STATUS LIKE 'wsrep_cluster_size'"|cut -f2
+  shell:
+    mysql -BN -u root -p"{{ openio_galera_root_password }}" -e "SHOW GLOBAL STATUS LIKE 'wsrep_cluster_size'"|cut -f2
   changed_when: false
   register: "_openio_galera_wsrep_cluster_size"
   tags: install
-  when: "(_openio_galera_wsrep_on.msg is defined and _openio_galera_wsrep_on.msg == 'ON') or _openio_galera_service_started is success"
+  when: "(_openio_galera_wsrep_on.msg is defined and _openio_galera_wsrep_on.msg == 'ON') \
+          or _openio_galera_service_started is success"
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Include secure tasks

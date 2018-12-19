@@ -19,29 +19,29 @@ An Ansible role for install and configure a MariaDB Galera Cluster. Specifically
 | `openio_galera_bind_interface` | `"{{ ansible_default_ipv4.alias }}"` | By default, the role retrieves IP addresses from the nodes group from the default network interface. |
 | `openio_galera_bind_address` | `hostvars[inventory_hostname]['ansible_' + openio_galera_bind_interface]['ipv4']['address']` | Overrides the IP address used to setup the cluster. |
 | `openio_galera_bind_port` | `3306` | Overrides the listening port. |
-| `openio_galera_binlog_format` | `ROW` | ... |
-| `openio_galera_cluster_name` | `openio` | ... |
+| `openio_galera_binlog_format` | `ROW` | Binary Log Format ['STATEMENT', 'ROW', 'MIXED'] |
+| `openio_galera_cluster_name` | `openio` | Defines the logical cluster name for the node |
 | `openio_galera_databases` | `[]` | Creates databases for your cluster. |
-| `openio_galera_datadir` | `/var/lib/mysql` | ... |
-| `openio_galera_default_storage_engine` | `InnoDB` | ... |
-| `openio_galera_innodb_autoinc_lock_mode` | `2` | ... |
-| `openio_galera_innodb_flush_log_at_trx_commit` | `0` | ... |
+| `openio_galera_datadir` | `/var/lib/mysql` | Data directory |
+| `openio_galera_default_storage_engine` | `InnoDB` | The default storage engine |
+| `openio_galera_innodb_autoinc_lock_mode` | `2` | Auto-increment lock modes |
+| `openio_galera_innodb_flush_log_at_trx_commit` | `0` | Controls the balance between strict ACID compliance for commit operations and higher performance that is possible when commit-related I/O operations are rearranged and done in batches |
 | `openio_galera_master_node` | `groups[openio_galera_nodes_group][0]` | By default, the master node is the first node defined in the nodes group. |
-| `openio_galera_mysql_user` | `mysql` | ... |
-| `openio_galera_nodes_group` | `openio_galera` | ... |
-| `openio_galera_root_user` | `root` | ... |
+| `openio_galera_mysql_user` | `mysql` | User used for mysql daemon |
+| `openio_galera_nodes_group` | `openio_galera` | Ansible inventory cluster's group |
+| `openio_galera_root_user` | `root` | DB user admin |
 | `openio_galera_root_password` | `root` | Required. Please change the default root password. |
-| `openio_galera_sst_user` | `sstuser` | ... |
+| `openio_galera_sst_user` | `sstuser` | State Snapshot Transfer user |
 | `openio_galera_sst_password` | `sstpassword` | Required. Please change the default sstpassword. |
-| `openio_galera_swappiness` | `0` | ... |
-| `openio_galera_sync_binlog` | `0` | ... |
+| `openio_galera_swappiness` | `0` | sysctl vm.swappiness |
+| `openio_galera_sync_binlog` | `0` | Controls how often the MySQL server synchronizes the binary log to disk |
 | `openio_galera_users` | `[]` | Creates users for your cluster. |
-| `openio_galera_version` | `10.1` | ... |
-| `openio_galera_wsrep_certify_nonPK` | `ON` | ... |
-| `openio_galera_wsrep_cluster_address` | `` | ... |
-| `openio_galera_wsrep_max_ws_rows` | `"131072"` | ... |
-| `openio_galera_wsrep_max_ws_size` | `"1073741824"` | ... |
-| `openio_galera_wsrep_sst_method` | `xtrabackup-v2` | ... |
+| `openio_galera_version` | `10.1` | Galera version |
+| `openio_galera_wsrep_certify_nonPK` | `ON` | When set to ON (the default), primary keys will be automatically generated for tables without one. This is required for parallel applying, and strongly recommended for all tables. |
+| `openio_galera_wsrep_cluster_address` | `` | The addresses of cluster nodes to connect to when starting up |
+| `openio_galera_wsrep_max_ws_rows` | `"131072"` | Defines the maximum number of rows the node allows in a write-set |
+| `openio_galera_wsrep_max_ws_size` | `"1073741824"` | Defines the maximum size the node allows for write-sets |
+| `openio_galera_wsrep_sst_method` | `xtrabackup-v2` | Defines the method or script the node uses in a State Snapshot Transfer |
 
 ## Dependencies
 

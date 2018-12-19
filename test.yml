@@ -30,7 +30,10 @@
 
   roles:
     - role: repo
-
+      openio_repository_no_log: false
+      openio_repository_products:
+        sds:
+          release: "18.10"
     - role: role_under_test
       openio_galera_root_password: mysecretrootpassword
       openio_galera_wsrep_sst_password: mysecretsstpassword

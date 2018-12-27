@@ -8,6 +8,7 @@
   when: not _openio_galera_mysqld_already_running.stdout or _openio_galera_wsrep_on.stderr is defined
   register: "_openio_galera_wsrep_on"
   tags: install
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Ensure service is stopped
   service:

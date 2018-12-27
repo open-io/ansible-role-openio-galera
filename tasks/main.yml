@@ -36,6 +36,7 @@
   register: "_openio_galera_wsrep_on"
   tags: install
   failed_when: false
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Install packages
   package:
@@ -80,6 +81,7 @@
     - _openio_galera_service_started2.state is not defined
     - _openio_galera_service_started2.state != 'started'
   when: _openio_galera_service_started.state is not defined or _openio_galera_service_started.state != 'started'
+  ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Check Galera cluster size
   shell:

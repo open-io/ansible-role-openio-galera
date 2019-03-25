@@ -2,34 +2,46 @@
 ---
 openio_galera_version: 10.1
 
-openio_galera_nodes_group: openio_galera
+openio_galera_nodes_group: galera
 
 openio_galera_datadir: /var/lib/mysql
 openio_galera_mysql_user: mysql
 openio_galera_root_user: root
-openio_galera_root_password: root
-
+openio_galera_root_password: "{{ openio_database_root_password | default('ROOT_PASS') }}"
 
 openio_galera_bind_interface: "{{ ansible_default_ipv4.alias }}"
 openio_galera_bind_address:
-  "{{ hostvars[inventory_hostname]['ansible_' + openio_galera_bind_interface]['ipv4']['address'] }}"
+  "{{ openio_bind_address \
+    | default(hostvars[inventory_hostname]['ansible_' + openio_galera_bind_interface]['ipv4']['address']) }}"
 openio_galera_bind_port: 3306
 
-openio_galera_master_node:
-  "{{ hostvars[groups[openio_galera_nodes_group][0]]['ansible_' ~ openio_galera_bind_interface]['ipv4']['address'] }}"
+openio_galera_master_node: "{{ hostvars[groups[openio_galera_nodes_group][0]]['openio_bind_address'] \
+  | default(hostvars[groups[openio_galera_nodes_group][0]]\
+  ['ansible_' ~ openio_galera_bind_interface]['ipv4']['address']) }}"
 openio_galera_wsrep_cluster_address: "gcomm://{{ groups[openio_galera_nodes_group] \
-  | map('extract', hostvars, ['ansible_' ~ openio_galera_bind_interface, 'ipv4', 'address']) | join(',') }}"
+  | map('extract', hostvars, ['openio_bind_address']) | join(',') }}"
 
 openio_galera_bootstrap_cluster: true
 openio_galera_provision_only: false
 
 openio_galera_sst_user: sstuser
-openio_galera_sst_password: sstpassword
+openio_galera_sst_password: "{{ openio_database_sst_password | default('SST_PASS') }}"
 
-openio_galera_cluster_name: openio
+openio_galera_cluster_name: 'prod-customer'
 
-openio_galera_users: []
-openio_galera_databases: []
+openio_galera_users:
+  - name: keystone
+    password: "{{ openio_database_keystone_password | default('KEYSTONE_PASS') }}"
+    priv: "keystone.*:ALL"
+    host: "%"
+  - name: keystone
+    password: "{{ openio_database_keystone_password | default('KEYSTONE_PASS') }}"
+    priv: "*.*:SUPER"
+    append_privs: true
+    host: "%"
+
+openio_galera_databases:
+  - name: keystone
 
 openio_galera_swappiness: 0
 openio_galera_wsrep_sst_method: xtrabackup-v2

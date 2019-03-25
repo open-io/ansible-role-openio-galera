@@ -1,0 +1,52 @@
+# Test playbook
+---
+- name: generate docker DB group
+  hosts: all
+  gather_facts: false
+  tasks:
+    - add_host:
+        name: "{{ item.name }}"
+        ansible_host: "{{ item.ip }}"
+        groups: db
+      with_items:
+        - { name: "node1", ip: "172.17.0.2" }
+        - { name: "node2", ip: "172.17.0.3" }
+        - { name: "node3", ip: "172.17.0.4" }
+      delegate_to: localhost
+      run_once: true
+      changed_when: false
+
+- hosts: localhost
+  become: true
+  gather_facts: true
+  vars:
+    # cookie for systctl in docker
+    docker: "tests"
+  pre_tasks:
+    - name: set python interpreter
+      set_fact:
+        ansible_python_interpreter: /usr/bin/python3
+      when: ansible_os_family == 'Debian'
+
+  roles:
+    - role: repo
+      openio_repository_no_log: false
+      openio_repository_products:
+        sds:
+          release: "18.10"
+    - role: role_under_test
+      openio_galera_root_password: mysecretrootpassword
+      openio_galera_wsrep_sst_password: mysecretsstpassword
+      openio_galera_cluster_name: myclustername
+      openio_galera_nodes_group: db
+      # openio_galera_bind_interface: eth0
+      openio_galera_master_node: 172.17.0.2
+      openio_galera_wsrep_cluster_address: gcomm://172.17.0.2,172.17.0.3,172.17.0.4
+      openio_galera_databases:
+        - name: travisdb
+      openio_galera_users:
+        - name: travis
+          password: travispw
+          priv: '*.*:GRANT,ALL'
+          host: '172.17.0.%'
+...

@@ -78,8 +78,7 @@
   delay: 10
   tags: configure
   failed_when:
-    - _openio_galera_service_started2.state is not defined
-    - _openio_galera_service_started2.state != 'started'
+    - _openio_galera_service_started2 is failed or _openio_galera_service_started2.state != 'started'
   when: _openio_galera_service_started.state is not defined or _openio_galera_service_started.state != 'started'
   ignore_errors: "{{ ansible_check_mode }}"
 

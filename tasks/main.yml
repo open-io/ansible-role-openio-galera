@@ -54,7 +54,7 @@
   service:
     name: "{{ openio_galera_service }}"
     state: started
-    enabled: true
+    enabled: "{{ openio_galera_service_enabled }}"
   register: _openio_galera_service_started
   until: _openio_galera_service_started is success
   retries: 2
@@ -71,7 +71,7 @@
   service:
     name: "{{ openio_galera_service }}"
     state: started
-    enabled: true
+    enabled: "{{ openio_galera_service_enabled }}"
   register: _openio_galera_service_started2
   until: _openio_galera_service_started2 is success
   retries: 2

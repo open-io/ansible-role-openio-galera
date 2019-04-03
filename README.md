@@ -31,6 +31,7 @@ An Ansible role for install and configure a MariaDB Galera Cluster. Specifically
 | `openio_galera_nodes_group` | `openio_galera` | Ansible inventory cluster's group |
 | `openio_galera_root_user` | `root` | DB user admin |
 | `openio_galera_root_password` | `root` | Required. Please change the default root password. |
+| `openio_galera_service_enabled` | `true` | Enable service at system boot. |
 | `openio_galera_sst_user` | `sstuser` | State Snapshot Transfer user |
 | `openio_galera_sst_password` | `sstpassword` | Required. Please change the default sstpassword. |
 | `openio_galera_swappiness` | `0` | sysctl vm.swappiness |

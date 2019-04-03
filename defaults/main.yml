@@ -21,6 +21,8 @@ openio_galera_master_node: "{{ hostvars[groups[openio_galera_nodes_group][0]]['o
 openio_galera_wsrep_cluster_address: "gcomm://{{ groups[openio_galera_nodes_group] \
   | map('extract', hostvars, ['openio_bind_address']) | join(',') }}"
 
+openio_galera_service_enabled: true
+
 openio_galera_bootstrap_cluster: true
 openio_galera_provision_only: false
 

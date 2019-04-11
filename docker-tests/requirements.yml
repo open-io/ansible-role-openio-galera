@@ -1,5 +1,5 @@
 ---
 - src: https://github.com/open-io/ansible-role-openio-repository.git
-  version: master
+  version: "18.10"
   name: repo
 ...

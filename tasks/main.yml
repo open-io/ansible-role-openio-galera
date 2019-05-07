@@ -114,7 +114,7 @@
     name: vm.swappiness
     value: "{{ openio_galera_swappiness }}"
     state: present
-  when: docker is not defined
+  when: ansible_virtualization_type != 'docker'
 
 - name: Bootstrap Cluster
   import_tasks: bootstrap.yml

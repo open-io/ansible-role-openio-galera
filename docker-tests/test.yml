@@ -20,8 +20,7 @@
   become: true
   gather_facts: true
   vars:
-    # cookie for systctl in docker
-    docker: "tests"
+    openio_bootstrap: true
   pre_tasks:
     - name: set python interpreter
       set_fact:
@@ -31,9 +30,7 @@
   roles:
     - role: repo
       openio_repository_no_log: false
-      openio_repository_products:
-        sds:
-          release: "18.10"
+      openio_repository_mirror_host: mirror2.openio.io
     - role: role_under_test
       openio_galera_root_password: mysecretrootpassword
       openio_galera_wsrep_sst_password: mysecretsstpassword

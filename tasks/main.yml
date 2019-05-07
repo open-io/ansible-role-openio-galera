@@ -129,4 +129,18 @@
   when:
     - openio_galera_bind_address == openio_galera_master_node
     - not openio_galera_provision_only
+
+- block:
+    - name: check galera
+      wait_for:
+        host: "{{ openio_galera_bind_address }}"
+        port: "{{ openio_galera_bind_port }}"
+      register: _galera_check
+      retries: 3
+      delay: 5
+      until: _galera_check is success
+      changed_when: false
+      when:
+        - not openio_galera_provision_only
+  when: openio_bootstrap | d(false)
 ...

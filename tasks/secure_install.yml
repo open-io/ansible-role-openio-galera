@@ -4,12 +4,14 @@
   register: _check_password
   changed_when: false
   failed_when: false
+  tags: configure
 
 - name: Set the MySQL root password
   command: 'mysqladmin -u root password "{{ openio_galera_root_password }}"'
   changed_when: false
   when: _check_password.rc == 0
   ignore_errors: "{{ ansible_check_mode }}"
+  tags: configure
 
 - name: Delete anonymous connections
   mysql_user:
@@ -19,6 +21,7 @@
     state: absent
     login_unix_socket: "{{ openio_galera_socket }}"
   ignore_errors: "{{ ansible_check_mode }}"
+  tags: configure
 
 - name: "Secure the MySQL root user for localhost"
   mysql_user:
@@ -33,6 +36,7 @@
     - "localhost"
     #- "{{ openio_galera_bind_address }}"
   ignore_errors: "{{ ansible_check_mode }}"
+  tags: configure
 
 - name: Remove the MySQL test database
   mysql_db:
@@ -42,4 +46,5 @@
     state: absent
     login_unix_socket: "{{ openio_galera_socket }}"
   ignore_errors: "{{ ansible_check_mode }}"
+  tags: configure
 ...

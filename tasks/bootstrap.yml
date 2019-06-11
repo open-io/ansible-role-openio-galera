@@ -7,7 +7,7 @@
     login_unix_socket: "{{ openio_galera_socket }}"
   when: not _openio_galera_mysqld_already_running.stdout or _openio_galera_wsrep_on.stderr is defined
   register: "_openio_galera_wsrep_on"
-  tags: install
+  tags: configure
   ignore_errors: "{{ ansible_check_mode }}"
 
 - name: Ensure service is stopped
@@ -20,10 +20,12 @@
     or (_openio_galera_systemctl_set_environment is defined and not _openio_galera_systemctl_set_environment.skipped)
     or (_openio_galera_wsrep_cluster_size.stdout|int == 0)
   ignore_errors: "{{ ansible_check_mode }}"
+  tags: configure
 
 - name: Remove systemctl MYSQLD_OPTS environment option
   command: systemctl unset-environment MYSQLD_OPTS
   when: _openio_galera_systemctl_set_environment.cmd is defined
+  tags: configure
 
 - name: Start the master node
   command: "{{ openio_galera_bin_new_cluster }}"
@@ -41,6 +43,7 @@
     - openio_galera_bind_address == openio_galera_master_node
     - ansible_service_mgr == 'systemd'
   ignore_errors: "{{ ansible_check_mode }}"
+  tags: configure
 
 - name: Create SST user
   mysql_user:
@@ -63,6 +66,7 @@
         or (_openio_galera_wsrep_cluster_size.stdout|int == 0)
     - openio_galera_bind_address == openio_galera_master_node
   ignore_errors: "{{ ansible_check_mode }}"
+  tags: configure
 
 - name: Start the slave nodes
   service:
@@ -81,4 +85,5 @@
         or (_openio_galera_wsrep_cluster_size.stdout|int == 0)
     - openio_galera_bind_address != openio_galera_master_node
   ignore_errors: "{{ ansible_check_mode }}"
+  tags: configure
 ...

@@ -5,7 +5,9 @@
   with_first_found:
     - "{{ ansible_distribution }}.yml"
     - "{{ ansible_os_family }}.yml"
-  tags: install
+  tags:
+    - install
+    - configure
 
 - name: "Include {{ ansible_distribution }} tasks"
   include_tasks: "{{ item }}"
@@ -19,12 +21,13 @@
   changed_when: false
   ignore_errors: true
   register: _openio_galera_mysqld_already_running
+  tags: configure
 
 - name: Check data directory
   stat:
     path: "{{ openio_galera_datadir }}"
   register: "_openio_galera_data_exist"
-  tags: install
+  tags: configure
 
 - name: Check Galera cluster wsrep status
   mysql_variables:
@@ -34,7 +37,7 @@
     login_unix_socket: "{{ openio_galera_socket }}"
   when: _openio_galera_mysqld_already_running.stdout
   register: "_openio_galera_wsrep_on"
-  tags: install
+  tags: configure
   failed_when: false
   ignore_errors: "{{ ansible_check_mode }}"
 
@@ -66,6 +69,7 @@
   command: systemctl set-environment MYSQLD_OPTS="--wsrep_on=OFF"
   when: _openio_galera_service_started.state is not defined or _openio_galera_service_started.state != 'started'
   register: _openio_galera_systemctl_set_environment
+  tags: configure
 
 - name: Retry starting service for securing
   service:
@@ -87,7 +91,7 @@
     mysql -BN -u root -p"{{ openio_galera_root_password }}" -e "SHOW GLOBAL STATUS LIKE 'wsrep_cluster_size'"|cut -f2
   changed_when: false
   register: "_openio_galera_wsrep_cluster_size"
-  tags: install
+  tags: configure
   when: "(_openio_galera_wsrep_on.msg is defined and _openio_galera_wsrep_on.msg == 'ON') \
           or _openio_galera_service_started is success"
   ignore_errors: "{{ ansible_check_mode }}"
@@ -115,6 +119,7 @@
     value: "{{ openio_galera_swappiness }}"
     state: present
   when: ansible_virtualization_type != 'docker'
+  tags: install
 
 - name: Bootstrap Cluster
   import_tasks: bootstrap.yml
@@ -140,6 +145,7 @@
       delay: 5
       until: _galera_check is success
       changed_when: false
+      tags: configure
       when:
         - not openio_galera_provision_only
   when: openio_bootstrap | d(false)

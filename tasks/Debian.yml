@@ -1,9 +1,23 @@
 ---
+- name: add apt key (with http-proxy)
+  apt_key:
+    data: "{{ lookup('url', 'http://' + openio_galera_repo_keyserver + '/pks/lookup?op=get&search=0x' \
+      + openio_galera_repo_gpgkey, split_lines=False) }}"
+  tags: install
+  register: apt_key_with_proxy
+  environment:
+    HTTP_PROXY: "{{ openio_environment.http_proxy }}"
+    HTTPS_PROXY: "{{ openio_environment.http_proxy }}"
+  when:
+    - openio_environment is defined
+    - openio_environment.http_proxy is defined
+
 - name: add apt key
   apt_key:
     keyserver: keyserver.ubuntu.com
     id: "{{ openio_galera_repo_gpgkey }}"
   tags: install
+  when: apt_key_with_proxy is skipped
 
 - name: repository installation
   apt_repository:

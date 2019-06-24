@@ -22,9 +22,19 @@
   ignore_errors: "{{ ansible_check_mode }}"
   tags: configure
 
+- name: Check for wsrep in systemctl MYSQLD_OPTS environment option
+  shell: 'systemctl show-environment|grep -q -E "^MYSQLD_OPTS=.*--wsrep_on=OFF.*"'
+  register: "_openio_galera_systemctl_show_environment_mysql_opts_wsrep_on"
+  when: _openio_galera_systemctl_set_environment.cmd is not defined
+  ignore_errors: true
+  changed_when: false
+  tags: configure
+
 - name: Remove systemctl MYSQLD_OPTS environment option
   command: systemctl unset-environment MYSQLD_OPTS
-  when: _openio_galera_systemctl_set_environment.cmd is defined
+  when: (_openio_galera_systemctl_set_environment.cmd is defined
+    or ( _openio_galera_systemctl_show_environment_mysql_opts_wsrep_on.rc is defined
+      and _openio_galera_systemctl_show_environment_mysql_opts_wsrep_on.rc == 0 ))
   tags: configure
 
 - name: Start the master node

@@ -28,6 +28,7 @@
   when: _openio_galera_systemctl_set_environment.cmd is not defined
   ignore_errors: true
   changed_when: false
+  failed_when: false
   tags: configure
 
 - name: Remove systemctl MYSQLD_OPTS environment option

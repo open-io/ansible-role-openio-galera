@@ -45,6 +45,8 @@ openio_galera_users:
 openio_galera_databases:
   - name: keystone
 
+openio_galera_extra_parameters: {}
+
 openio_galera_swappiness: 0
 openio_galera_wsrep_sst_method: xtrabackup-v2
 openio_galera_binlog_format: "ROW"

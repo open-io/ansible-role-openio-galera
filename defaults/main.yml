@@ -60,4 +60,17 @@ openio_galera_sync_binlog: 0
 
 openio_galera_wsrep_max_ws_rows: "131072"
 openio_galera_wsrep_max_ws_size: "1073741824"
+
+# replication
+openio_galera_replication: false
+openio_galera_replication_type: "slave"
+openio_galera_replication_log_slave_updates: "ON"
+openio_galera_replication_server_id: "2"
+openio_galera_replication_wsrep_gtid_mode: "ON"
+openio_galera_replication_wsrep_gtid_domain_id: "{{ openio_galera_replication_server_id }}"
+openio_galera_replication_log_bin: /var/lib/mysql/mysql-bin
+openio_galera_replication_gtid_domain_id: "{{ openio_galera_replication_server_id | int \
+  + groups[openio_galera_nodes_group].index(inventory_hostname) + 1 }}"
+openio_galera_replication_user: replication
+openio_galera_replication_password: "{{ openio_database_replication_password | default('REPLICATION_PASS') }}"
 ...

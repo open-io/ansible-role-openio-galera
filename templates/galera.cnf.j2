@@ -15,3 +15,11 @@ wsrep_sst_auth={{ openio_galera_sst_user }}:{{ openio_galera_sst_password }}
 {% for k, v in openio_galera_extra_parameters.iteritems() %}
 {{ k }}={{ v }}
 {% endfor %}
+{% if openio_galera_replication %}
+log_slave_updates={{ openio_galera_replication_log_slave_updates }}
+server_id={{ openio_galera_replication_server_id | int }}
+wsrep_gtid_mode={{ openio_galera_replication_wsrep_gtid_mode }}
+wsrep_gtid_domain_id={{ openio_galera_replication_wsrep_gtid_domain_id | int }}
+log_bin={{ openio_galera_replication_log_bin }}
+gtid_domain_id={{ openio_galera_replication_gtid_domain_id | int }}
+{% endif %}

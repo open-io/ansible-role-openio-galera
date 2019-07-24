@@ -132,8 +132,16 @@
   import_tasks: postinstall.yml
   tags: configure
   when:
+    - openio_galera_replication and openio_galera_replication_type == "master" or not openio_galera_replication
     - openio_galera_bind_address == openio_galera_master_node
     - not openio_galera_provision_only
+
+- name: include replication tasks
+  import_tasks: replication.yml
+  tags: configure
+  when:
+    - openio_galera_replication and openio_galera_replication_type == "master" or not openio_galera_replication
+    - openio_galera_replication
 
 - block:
     - name: check galera

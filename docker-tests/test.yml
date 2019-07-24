@@ -7,11 +7,12 @@
     - add_host:
         name: "{{ item.name }}"
         ansible_host: "{{ item.ip }}"
+        _id: "{{ item.id }}"
         groups: db
       with_items:
-        - { name: "node1", ip: "172.17.0.2" }
-        - { name: "node2", ip: "172.17.0.3" }
-        - { name: "node3", ip: "172.17.0.4" }
+        - { name: "node1", ip: "172.17.0.2", id: "2" }
+        - { name: "node2", ip: "172.17.0.3", id: "3" }
+        - { name: "node3", ip: "172.17.0.4", id: "4" }
       delegate_to: localhost
       run_once: true
       changed_when: false
@@ -21,6 +22,7 @@
   gather_facts: true
   vars:
     openio_bootstrap: true
+
   pre_tasks:
     - name: set python interpreter
       set_fact:
@@ -31,12 +33,12 @@
     - role: repo
       openio_repository_no_log: false
       openio_repository_mirror_host: mirror2.openio.io
+
     - role: role_under_test
       openio_galera_root_password: mysecretrootpassword
       openio_galera_wsrep_sst_password: mysecretsstpassword
       openio_galera_cluster_name: myclustername
       openio_galera_nodes_group: db
-      # openio_galera_bind_interface: eth0
       openio_galera_master_node: 172.17.0.2
       openio_galera_wsrep_cluster_address: gcomm://172.17.0.2,172.17.0.3,172.17.0.4
       openio_galera_databases:
@@ -46,4 +48,7 @@
           password: travispw
           priv: '*.*:GRANT,ALL'
           host: '172.17.0.%'
+      openio_galera_replication: true
+      openio_galera_replication_type: "master"
+      openio_galera_replication_gtid_domain_id: "1"
 ...

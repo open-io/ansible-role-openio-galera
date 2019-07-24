@@ -1,0 +1,15 @@
+---
+- name: Create the user (replication)
+  mysql_user:
+    name: "{{ openio_galera_replication_user }}"
+    password: "{{ openio_galera_replication_password }}"
+    host: "%"
+    priv: "*.*:REPLICATION SLAVE,REPLICATION CLIENT"
+    login_user: root
+    login_password: "{{ openio_galera_root_password }}"
+    state: present
+    login_unix_socket: "{{ openio_galera_socket }}"
+  ignore_errors: "{{ ansible_check_mode }}"
+  tags: configure
+  when: openio_galera_replication_type == "master"
+...

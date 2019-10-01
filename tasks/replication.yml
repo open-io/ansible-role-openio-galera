@@ -11,5 +11,4 @@
     login_unix_socket: "{{ openio_galera_socket }}"
   ignore_errors: "{{ ansible_check_mode }}"
   tags: configure
-  when: openio_galera_replication_type == "master"
 ...

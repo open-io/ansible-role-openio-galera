@@ -12,7 +12,7 @@ wsrep_max_ws_size={{ openio_galera_wsrep_max_ws_size }}
 wsrep_sst_method={{ openio_galera_wsrep_sst_method }}
 wsrep_certify_nonPK={{ openio_galera_wsrep_certify_nonPK }}
 wsrep_sst_auth={{ openio_galera_sst_user }}:{{ openio_galera_sst_password }}
-{% for k, v in openio_galera_extra_parameters.iteritems() %}
+{% for k, v in openio_galera_extra_parameters.items() | list %}
 {{ k }}={{ v }}
 {% endfor %}
 {% if openio_galera_replication %}

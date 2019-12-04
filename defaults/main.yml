@@ -47,6 +47,7 @@ openio_galera_databases:
 
 openio_galera_extra_parameters: {}
 
+openio_galera_sysctl_managed: true
 openio_galera_swappiness: 0
 openio_galera_wsrep_sst_method: xtrabackup-v2
 openio_galera_binlog_format: "ROW"

@@ -118,7 +118,9 @@
     name: vm.swappiness
     value: "{{ openio_galera_swappiness }}"
     state: present
-  when: ansible_virtualization_type != 'docker'
+  when:
+    - openio_galera_sysctl_managed
+    - ansible_virtualization_type != 'docker'
   tags: install
 
 - name: Bootstrap Cluster

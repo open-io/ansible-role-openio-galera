@@ -9,7 +9,7 @@ An Ansible role for install and configure a MariaDB Galera Cluster. Specifically
 
 ## Requirements
 
-- Ansible 2.4+
+- Ansible 2.9+
 
 ## Role Variables
 

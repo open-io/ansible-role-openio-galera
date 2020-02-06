@@ -116,7 +116,7 @@
 - name: Configure swappiness
   sysctl:
     name: vm.swappiness
-    value: "{{ openio_galera_swappiness }}"
+    value: "{{ openio_galera_swappiness | int }}"
     state: present
   when:
     - openio_galera_sysctl_managed

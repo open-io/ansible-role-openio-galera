@@ -5,21 +5,19 @@ sudo: required
 
 env:
   global:
-    - ANSIBLE_VERSION=2.5
+    - ANSIBLE_VERSION=2.9
   matrix:
     - DISTRIBUTION: centos
       VERSION: 7
-#    - DISTRIBUTION: centos
-#      VERSION: 8
-    - DISTRIBUTION: ubuntu
-      VERSION: 16.04
     - DISTRIBUTION: ubuntu
       VERSION: 18.04
-#    - DISTRIBUTION: debian
-#      VERSION: 9
 
 services:
   - docker
+
+language: python
+python:
+  - "3.6"
 
 before_install:
   # Install latest Git

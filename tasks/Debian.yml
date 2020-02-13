@@ -11,6 +11,9 @@
   when:
     - openio_environment is defined
     - openio_environment.http_proxy is defined
+  until: apt_key_with_proxy is success
+  retries: 5
+  delay: 2
 
 - name: add apt key
   apt_key:
@@ -18,6 +21,10 @@
     id: "{{ openio_galera_repo_gpgkey }}"
   tags: install
   when: apt_key_with_proxy is skipped
+  register: apt_key_without_proxy
+  until: apt_key_without_proxy is success
+  retries: 5
+  delay: 2
 
 - name: repository installation
   apt_repository:

@@ -1,5 +1,5 @@
 
-[![Build Status](https://travis-ci.org/open-io/ansible-role-openio-galera.svg?branch=master)](https://travis-ci.org/open-io/ansible-role-openio-galera)
+[![Build Status](https://travis-ci.org/open-io/ansible-role-openio-galera.svg?branch=20.04)](https://travis-ci.org/open-io/ansible-role-openio-galera)
 # Ansible role `galera`
 
 An Ansible role for install and configure a MariaDB Galera Cluster. Specifically, the responsibilities of this role are to:

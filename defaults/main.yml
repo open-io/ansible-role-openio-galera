@@ -9,7 +9,7 @@ openio_galera_mysql_user: mysql
 openio_galera_root_user: root
 openio_galera_root_password: "{{ openio_database_root_password | default('ROOT_PASS') }}"
 
-openio_galera_bind_interface: "{{ ansible_default_ipv4.alias }}"
+openio_galera_bind_interface: "{{ openio_bind_interface | d(ansible_default_ipv4.alias) }}"
 openio_galera_bind_address:
   "{{ openio_bind_address \
     | default(hostvars[inventory_hostname]['ansible_' + openio_galera_bind_interface]['ipv4']['address']) }}"
